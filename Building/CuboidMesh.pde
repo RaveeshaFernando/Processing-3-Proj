@@ -1,5 +1,5 @@
 public class CuboidMesh {
- 
+  
     private float cubeWidth;                              // Cube width (side length of the cube)
     private float maxDistance;                            // Max distance between 2 points of the frame
     float startXPos, startYPos;                           // Start x-y positions for the mesh
@@ -25,17 +25,23 @@ public class CuboidMesh {
   
   
     // To display the cube
-    void displayMesh(int cubeXCount, int cubeYCount){
-        int kx = cubeXCount/2;
-        int ky = cubeYCount/2;
+    void displayMesh(int XCount, int YCount){
+        int kx = XCount/2;
+        int ky = YCount/2;
         float w = cubeWidth;
       
         //To draw the 6 sides of the cube
         for(int i = 0; i < 6; i++){
             pushMatrix();
-            translate(0, 0, pow(-1,i)*w * kx);
-            if(i<4) mesh.drawSide(cubeXCount, cubeYcount);          //To draw the sides
-            else if(i>=4)mesh.drawSide(cubeXCount, cubeXcount);     //To draw the top and the bottom, since they have different dimentions
+            
+            if(i<4){                                      //To draw the sides
+                translate(0, 0, pow(-1,i)*w * kx);
+                mesh.drawSide(XCount, YCount);          
+            }
+            else{
+                translate(0, 0, pow(-1,i)*w * ky);
+                mesh.drawSide(XCount, XCount);           //To draw the top and the bottom, since they have different dimentions
+            }
             popMatrix();
             if(i == 1) rotateY(PI/2);
             else if(i % 2 == 1) rotateX(PI/2);
@@ -43,26 +49,26 @@ public class CuboidMesh {
     }
   
     //To draw a side of a cube
-    void drawSide(int cubeXCount,int cubeYCount) {
+    void drawSide(int cubeX,int cubeY) {
         float w = cubeWidth;
         float d = w / cos(PI/4);
         float dist=0;
         
         int offsetXCount = 0;
-        if(cubeXCount % 2 == 0) offsetXCount = 1;
+        if(cubeX % 2 == 0) offsetXCount = 1;
         else offsetXCount = 0;
 
         int offsetYCount = 0;
-        if(cubeYCount % 2 == 0) offsetYCount = 1;
+        if(cubeY % 2 == 0) offsetYCount = 1;
         else offsetYCount = 0;
        
         //Draw one cube by one to build the side
-        for (int x = -cubeXCount / 2; x <= cubeXCount / 2 - offsetXCount; x++) {
-            for (int y = -cubeYCount / 2; y <= cubeYCount / 2 - offsetYCount; y++){
+        for (int x = -cubeX / 2; x <= cubeX / 2 - offsetXCount; x++) {
+            for (int y = -cubeY / 2; y <= cubeY / 2 - offsetYCount; y++){
                 float mouseXMap = map(mouseX, 0, width, -width/2, width/2);
                 float mouseYMap = map(mouseY, 0, height, -height/2, height/2);
                 
-                dist = dist(mouseXMap, mouseYMap, x * w , y * w);
+                dist = dist(mouseXMap, mouseYMap, x * w , x * w);
                 
                 
                 float t = dist / maxDistance * 255;       // Parameter for according with the distance
@@ -132,7 +138,7 @@ public class CuboidMesh {
     void drawCylinder( int sides, float r, float h, float x, float y,float t){
         
         fill(0,50-t,200+t);                   //To have a blue gradient fill at the beginning
-        
+
     
         float angle = 360 / sides;
         float halfHeight = h / 2;
