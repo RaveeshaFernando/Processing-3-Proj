@@ -2,12 +2,25 @@ public class CuboidMesh {
  
     private float cubeWidth;                              // Cube width (side length of the cube)
     private float maxDistance;                            // Max distance between 2 points of the frame
-  
+    float startXPos, startYPos;                           // Start x-y positions for the mesh
+    
+    int[][] circleBcolorMatrix;                           // Set Blue color for circles: To create changing colours with the mouse
+    int B = 200;
   
     //Counstruct the CubeMesh class
-    public CuboidMesh(float cubeWidth){
+    public CuboidMesh(float cubeWidth, int xcount, int ycount, int zcount){
         this.cubeWidth = cubeWidth;                       // Set the cube width
         this.maxDistance = dist(0, 0, width, height);     // Calculate the max distance between 2 points of the frame
+        
+        // Intialize the Blue color matrice to default values
+        circleBcolorMatrix = new int[xcount][ycount];
+    
+        //assigning blue color values to put in the circles
+        for(int x=0;x<circleBcolorMatrix.length;x++){
+            for(int y=0;y<circleBcolorMatrix[0].length;y++){
+                  circleBcolorMatrix[x][y] = B;
+            }
+        }
     }
   
   
@@ -57,63 +70,21 @@ public class CuboidMesh {
                 float t = dist / maxDistance * 255;       // Parameter for according with the distance
                 float size = dist / maxDistance * d;      // size of the inside cube varies according with the distance 
         
-                //fill(192 - t, 192, t + 132);            // Fill the squares in varing colors, Comment this and uncomment the following line to have a solid color
-                fill(183);                                // Fill the squares in solid ash color, Comment this and uncomment the above line to have a varing colors
+                fill(212-t);                              // Fill the cubes in varing colors, Comment this and uncomment the following line to have a solid color
+                //fill(212);                              // Fill the cubes in solid ash color, Comment this and uncomment the above line to have a varing colors
                 
-                stroke(65);
+                noStroke();                               // Uncomment this and comment the below codeline to disable edge lines of the cube
+                //stroke(65);                             // To view the edges of the Cubes
+                
                 //Draw the building shaped cuboid using small cubes
                 drawCustomCuboid(d, w, x * w, y * w);
                 
-                //Draw the small cube/disk inside every unit cube in the side
-                //fill(t*t - 2*t + 5, x * x * w, 3 * y);
-                //noStroke(); // no strokes for the small cuboids
-                //drawCustomCuboid(size, w + size, x * w, y * w);// draw small cube (the cube which changing the size when moving mouse)    
-                drawCylinder(30, w/2, w + size, x * w, y * w);
+                //Draw the small disks inside every unit cube in the side
+                drawCylinder(30, w/3, w + size, x * w, y * w,t);
             }
         }
     }
     
-    void drawCylinder( int sides, float r, float h, float x, float y)
-  {
-    fill(100, 200, 0);
-    float angle = 360 / sides;
-    float halfHeight = h / 2;
-
-    // draw top of the tube
-    beginShape();
-    for (int i = 0; i < sides; i++) {
-      float x0 = cos( radians( i * angle ) ) * r;
-      float y0 = sin( radians( i * angle ) ) * r;
-      PVector vec = new PVector(x0, y0);
-      vec.rotate(PI/4);
-      vertex( vec.x + x, vec.y + y, -halfHeight);
-    }
-    endShape(CLOSE);
-
-    // draw bottom of the tube
-    beginShape();
-    for (int i = 0; i < sides; i++) {
-      float x0 = cos( radians( i * angle ) ) * r;
-      float y0 = sin( radians( i * angle ) ) * r;
-      PVector vec = new PVector(x0, y0);
-      vec.rotate(PI/4);
-      vertex( vec.x + x, vec.y + y, halfHeight);
-    }
-    endShape(CLOSE);
-
-    // draw sides
-    beginShape(TRIANGLE_STRIP);
-    for (int i = 0; i < sides + 1; i++) {
-      float x0 = cos( radians( i * angle ) ) * r;
-      float y0 = sin( radians( i * angle ) ) * r;
-      PVector vec = new PVector(x0, y0);
-      vec.rotate(PI/4);
-      vertex( vec.x + x, vec.y + y, halfHeight);
-      vertex( vec.x + x, vec.y + y, -halfHeight);
-    }
-    endShape(CLOSE);
-  }
-  
     // Code to draw unit cuboids
     // d = diagonal of the top square 
     // h = height of the cuboid
@@ -158,4 +129,69 @@ public class CuboidMesh {
         }
         endShape(CLOSE);
     }
+    
+    //To draw small disks inside the cubes
+    void drawCylinder( int sides, float r, float h, float x, float y,float t){
+        
+        fill(0,50-t,200+t);                   //To have a blue gradient fill at the beginning
+        
+    
+        float angle = 360 / sides;
+        float halfHeight = h / 2;
+    
+        // draw top of the tube
+        beginShape();
+        for (int i = 0; i < sides; i++) {
+            float x0 = cos( radians( i * angle ) ) * r;
+            float y0 = sin( radians( i * angle ) ) * r;
+            PVector vec = new PVector(x0, y0);
+            vec.rotate(PI/4);
+            vertex( vec.x + x, vec.y + y, -halfHeight);
+        }
+        endShape(CLOSE);
+    
+        // draw bottom of the tube
+        beginShape();
+        for (int i = 0; i < sides; i++) {
+            float x0 = cos( radians( i * angle ) ) * r;
+            float y0 = sin( radians( i * angle ) ) * r;
+            PVector vec = new PVector(x0, y0);
+            vec.rotate(PI/4);
+            vertex( vec.x + x, vec.y + y, halfHeight);
+        }
+        endShape(CLOSE);
+    
+        // draw sides
+        beginShape(TRIANGLE_STRIP);
+        for (int i = 0; i < sides + 1; i++) {
+            float x0 = cos( radians( i * angle ) ) * r;
+            float y0 = sin( radians( i * angle ) ) * r;
+            PVector vec = new PVector(x0, y0);
+            vec.rotate(PI/4);
+            vertex( vec.x + x, vec.y + y, halfHeight);
+            vertex( vec.x + x, vec.y + y, -halfHeight);
+        }
+        endShape(CLOSE);
+    }
+    
+    
+    //When press the mouse change the colour of circles//  
+    void mouseMoved(int xcount,int ycount,int zcount){
+      
+        float startXPos = (-xcount/2) ;
+        float startYPos = (-ycount/2) ;
+    
+        if(mouseX >= startXPos &&  mouseX <= (startXPos+xcount*cubeWidth) && mouseY >= startYPos &&  mouseY < (startYPos+ycount*cubeWidth)){
+            int i = (int)((mouseX - startXPos)/cubeWidth);
+            int j = (int)((mouseY - startYPos)/cubeWidth);
+            
+            if(i>=xcount) i=xcount-1;
+            if(j>=ycount) j=ycount-1;
+            
+            B = (int)random(50,255);
+            
+            circleBcolorMatrix[i][j] = B;
+        }
+  }
+  
 }

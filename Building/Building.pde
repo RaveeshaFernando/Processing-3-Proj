@@ -26,11 +26,16 @@ void setup() {
     
     
     // To create a mesh given the square dimentions and width
-    mesh=new CuboidMesh(cubeWidth);  
+    mesh=new CuboidMesh(cubeWidth,cubeXcount,cubeYcount,cubeZcount);  
   
 }
 
 void draw(){
     background(0,0,0);  
     mesh.displayMesh(cubeXcount,cubeYcount,cubeZcount);
+}
+
+// Adding mouse pressed 
+void mouseMoved(){
+    mesh.mouseMoved(cubeXcount,cubeYcount,cubeZcount);  
 }
