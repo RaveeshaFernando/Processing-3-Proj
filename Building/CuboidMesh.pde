@@ -68,9 +68,51 @@ public class CuboidMesh {
                 //fill(t*t - 2*t + 5, x * x * w, 3 * y);
                 //noStroke(); // no strokes for the small cuboids
                 //drawCustomCuboid(size, w + size, x * w, y * w);// draw small cube (the cube which changing the size when moving mouse)    
+                drawCylinder(30, x*w/4.5, w + size, x * w, y * w);
             }
         }
     }
+    
+    void drawCylinder( int sides, float r, float h, float x, float y)
+  {
+    fill(100, 200, 0);
+    float angle = 360 / sides;
+    float halfHeight = h / 2;
+
+    // draw top of the tube
+    beginShape();
+    for (int i = 0; i < sides; i++) {
+      float x0 = cos( radians( i * angle ) ) * r;
+      float y0 = sin( radians( i * angle ) ) * r;
+      PVector vec = new PVector(x0, y0);
+      vec.rotate(PI/4);
+      vertex( vec.x + x, vec.y + y, -halfHeight);
+    }
+    endShape(CLOSE);
+
+    // draw bottom of the tube
+    beginShape();
+    for (int i = 0; i < sides; i++) {
+      float x0 = cos( radians( i * angle ) ) * r;
+      float y0 = sin( radians( i * angle ) ) * r;
+      PVector vec = new PVector(x0, y0);
+      vec.rotate(PI/4);
+      vertex( vec.x + x, vec.y + y, halfHeight);
+    }
+    endShape(CLOSE);
+
+    // draw sides
+    beginShape(TRIANGLE_STRIP);
+    for (int i = 0; i < sides + 1; i++) {
+      float x0 = cos( radians( i * angle ) ) * r;
+      float y0 = sin( radians( i * angle ) ) * r;
+      PVector vec = new PVector(x0, y0);
+      vec.rotate(PI/4);
+      vertex( vec.x + x, vec.y + y, halfHeight);
+      vertex( vec.x + x, vec.y + y, -halfHeight);
+    }
+    endShape(CLOSE);
+  }
   
     // Code to draw unit cuboids
     // d = diagonal of the top square 
