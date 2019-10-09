@@ -3,7 +3,7 @@ import peasy.*;                              //Imported the peasy cam library
 PeasyCam cam;                                // creating an instance for peasy camera
 
 float cubeWidth;                             // set size of the cubes
-int cubeXcount, cubeYcount, cubeZcount;      // set number of cubes along x,y and z
+int cubeXcount, cubeYcount;      // set number of cubes along x,y
 
 CuboidMesh mesh;                             // Mesh to be drawn
 
@@ -20,22 +20,21 @@ void setup() {
     cubeWidth = 40;  //Set the width of square
     
     //Set the number of cube along x,y and z 
-    cubeXcount = 5;   // Square grid x count
-    cubeYcount = 9;   // Square grid y count
-    cubeZcount = 9;   // Square grid z count
+    cubeXcount = 7;   // Cube grid x count
+    cubeYcount = 13;   // Cube grid y count
     
     
     // To create a mesh given the square dimentions and width
-    mesh=new CuboidMesh(cubeWidth,cubeXcount,cubeYcount,cubeZcount);  
+    mesh=new CuboidMesh(cubeWidth,cubeXcount,cubeYcount);  
   
 }
 
 void draw(){
-    background(0,0,0);  
-    mesh.displayMesh(cubeXcount,cubeYcount,cubeZcount);
+    background(75);  
+    mesh.displayMesh(cubeXcount,cubeYcount);
 }
 
 // Adding mouse pressed 
 void mouseMoved(){
-    mesh.mouseMoved(cubeXcount,cubeYcount,cubeZcount);  
+    mesh.mouseMoved(cubeXcount,cubeYcount);  
 }
