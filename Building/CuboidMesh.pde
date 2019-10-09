@@ -8,7 +8,7 @@ public class CuboidMesh {
     int B = 200;
   
     //Counstruct the CubeMesh class
-    public CuboidMesh(float cubeWidth, int xcount, int ycount){
+    public CuboidMesh(float cubeWidth, int xcount, int ycount, int zcount){
         this.cubeWidth = cubeWidth;                       // Set the cube width
         this.maxDistance = dist(0, 0, width, height);     // Calculate the max distance between 2 points of the frame
         
@@ -25,22 +25,27 @@ public class CuboidMesh {
   
   
     // To display the cube
-    void displayMesh(int XCount, int YCount){
-        int kx = XCount/2;
-        int ky = YCount/2;
+    void displayMesh(int XCount, int YCount, int ZCount){
+        int kx = XCount/2;                               //To detemine the distance between the two sides of the main cuboid
+        int ky = YCount/2;                               //To detemine the distance between the top and the bottom of the main cuboid
+        int kz = ZCount/2;                               //To detemine the distance between the front and the back of the main cuboid
         float w = cubeWidth;
       
         //To draw the 6 sides of the cube
         for(int i = 0; i < 6; i++){
             pushMatrix();
             
-            if(i<4){                                      //To draw the sides
-                translate(0, 0, pow(-1,i)*w * kx);
+            if(i<2){                                      //To draw the front and the back
+                translate(0, 0, pow(-1,i)*w * kz);
                 mesh.drawSide(XCount, YCount);          
+            }
+            else if(i<4){
+                translate(0, 0, pow(-1,i)*w * kx);
+                mesh.drawSide(ZCount, YCount);           //To draw the two sides
             }
             else{
                 translate(0, 0, pow(-1,i)*w * ky);
-                mesh.drawSide(XCount, XCount);           //To draw the top and the bottom, since they have different dimentions
+                mesh.drawSide(ZCount, XCount);           //To draw the top and the bottom
             }
             popMatrix();
             if(i == 1) rotateY(PI/2);
@@ -177,25 +182,5 @@ public class CuboidMesh {
         }
         endShape(CLOSE);
     }
-    
-    
-    //When press the mouse change the colour of circles//  
-    void mouseMoved(int xcount,int ycount){
-      
-        float startXPos = (-xcount/2) ;
-        float startYPos = (-ycount/2) ;
-    
-        if(mouseX >= startXPos &&  mouseX <= (startXPos+xcount*cubeWidth) && mouseY >= startYPos &&  mouseY < (startYPos+ycount*cubeWidth)){
-            int i = (int)((mouseX - startXPos)/cubeWidth);
-            int j = (int)((mouseY - startYPos)/cubeWidth);
-            
-            if(i>=xcount) i=xcount-1;
-            if(j>=ycount) j=ycount-1;
-            
-            B = (int)random(50,255);
-            
-            circleBcolorMatrix[i][j] = B;
-        }
-  }
   
 }
