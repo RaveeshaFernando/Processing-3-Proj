@@ -68,7 +68,7 @@ public class CuboidMesh {
                 //fill(t*t - 2*t + 5, x * x * w, 3 * y);
                 //noStroke(); // no strokes for the small cuboids
                 //drawCustomCuboid(size, w + size, x * w, y * w);// draw small cube (the cube which changing the size when moving mouse)    
-                drawCylinder(30, x*w/4.5, w + size, x * w, y * w);
+                drawCylinder(30, w/2, w + size, x * w, y * w);
             }
         }
     }
